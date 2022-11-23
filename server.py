@@ -138,6 +138,10 @@ async def trigger():
     return jsonify({"status": "ok"})
 
 
+@app.route('/', methods=['GET'])
+async def test():
+    return jsonify({"status": "running"})
+
 @app.route('/employees', methods=['GET'])
 async def employees():
     global result
