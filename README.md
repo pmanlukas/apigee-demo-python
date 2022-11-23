@@ -50,10 +50,10 @@ Get employee data with dedicated paging parameters.
 
 Get employee data with one filter.
 ```
-<server>employees?page_size=10&page=0&first_name=Nkw
+<server>/employees?page_size=10&page=0&first_name=Nkw
 ```
 
 Get employee data with two filters.
 ```
-<server>employees?page_size=10&page=0&first_name=Nkw&last_name=Ngq
+<server>/employees?page_size=10&page=0&first_name=Nkw&last_name=Ngq
 ```
