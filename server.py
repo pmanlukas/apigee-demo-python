@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from dateutil import parser
 from flask import Flask, request, jsonify
 import pandas as pd
 import asyncio
@@ -19,6 +20,7 @@ import aiohttp
 import json
 import headers
 from enum import Enum
+from pytz import timezone
 
 class Status(Enum):
     NONE=1
@@ -36,7 +38,8 @@ class Verint:
 
     url_2 = "https://wfo.mt4.verintcloudservices.com/wfo/fis-api/v1/schedules?retrievalStartDate=2023-01-01T00%3A00%3A00Z&retrievalEndDate=2023-01-30T00%3A00%3A00Z&employeeLookupKey=userName&employeeIdentifierList=Testuser1"
 
-    headers = headers.verintHeaders
+    headers1 = headers.verintHeaders
+    headers2 = headers.verintHeaders
 
     async def load(preload):
         global lock, status
@@ -47,7 +50,7 @@ class Verint:
         else:
             print(">>> loading data from Verint <<<")
             timeout = aiohttp.ClientTimeout(total=600)
-            async with aiohttp.ClientSession(headers=Verint.headers, timeout=timeout) as session:
+            async with aiohttp.ClientSession(headers=Verint.headers1, timeout=timeout) as session:
                 async with session.get(Verint.url) as resp:
                     j = await resp.json()
         rows = []
@@ -69,9 +72,9 @@ class Verint:
     async def load_url_2():
         print(">>> loading data from Verint (scheduled) <<<")
         timeout = aiohttp.ClientTimeout(total=600)
-        async with aiohttp.ClientSession(headers=Verint.headers, timeout=timeout) as session:
+        async with aiohttp.ClientSession(headers=Verint.headers2, timeout=timeout) as session:
             async with session.get(Verint.url_2) as resp:
-                j = await resp.json()
+                j = await resp.text()
         return j
 
 class TS:
@@ -80,7 +83,7 @@ class TS:
 
     url_2 = "https://wfm.saas2.timesquare.fr/api/feed/personnes/947013/plannings_mod?datetime-min=2023-01-01&datetime-max=2023-01-30&start-index=1&max-results=2147483646"
 
-    headers = headers.tsqHeaders
+    headers1 = headers.tsqHeaders
 
     async def load(preload):
         if preload:
@@ -90,7 +93,7 @@ class TS:
         else:
             print(">>> loading data from TS <<<")
             timeout = aiohttp.ClientTimeout(total=600)
-            async with aiohttp.ClientSession(headers=TS.headers, timeout=timeout) as session:
+            async with aiohttp.ClientSession(headers=TS.headers1, timeout=timeout) as session:
                 async with session.get(TS.url) as resp:
                     j = await resp.json()
         rows = []
@@ -107,11 +110,11 @@ class TS:
         return True, df
 
     async def load_url_2():
-        print(">>> loading data from TS <<<")
+        print(">>> loading data from TS (scheduled) <<<")
         timeout = aiohttp.ClientTimeout(total=600)
-        async with aiohttp.ClientSession(headers=TS.headers, timeout=timeout) as session:
+        async with aiohttp.ClientSession(headers=TS.headers1, timeout=timeout) as session:
             async with session.get(TS.url_2) as resp:
-                j = await resp.json()
+                j = await resp.text()
         return j
 
 async def loadData(url: str, headers: dict = None):
@@ -186,6 +189,108 @@ async def employees():
     if lname != '':
         current = current[current['last_name'] == lname]
     return current.iloc[start:end].to_json(orient=orient)
+
+@app.route('/schedules', methods=['GET'])
+async def schedules():
+    try:
+        rsdStr = request.args.get("retrievalStartDate", "2023-01-01T00:00:00Z")
+        rsd = parser.parse(rsdStr)
+    except BaseException:
+        return jsonify({"error": f"retrievalStartDate format error: {rsdStr}"}), 400
+    try:
+        redStr = request.args.get("retrievalEndDate", "2023-01-30T00:00:00Z")
+        red = parser.parse(redStr)
+    except BaseException:
+        return jsonify({"error": f"retrievalStartDate format error: {rsdStr}"}), 400
+    try:
+        page_size = int(request.args.get("page_size", "5"))
+    except ValueError:
+        return jsonify({"error": "parameter page_size must be an integer"}), 400
+
+    with open("verint_response_09012023.json") as file:
+        j = json.load(file)
+
+    verint_data = j ['data']
+    att = verint_data.get('attributes')
+    att.pop('calendarEventAssignmentList')
+    verint_sil = att.get('scheduleInformationList')
+    for si in verint_sil:
+        shifts = si.get('shifts') or []
+        filtered = []
+        for shift in shifts:
+            est = shift.get('mainShiftEvent').get('eventStartTime')
+            stmp = parser.parse(est)
+            if stmp >= rsd and stmp <= red:
+                filtered.append(shift)
+            
+        si['shifts'] = filtered    
+    with open("TSQ_response_09012023.json") as file:
+        j = json.load(file)
+    entries = j['entries']
+
+    # schedule information list
+    sil = []
+    for e in entries:
+        shifts = []
+        composantsPlanning = e['composantsPlanning']
+        for cp in composantsPlanning:
+            tachesPlanning = cp.get('tachesPlanning') or []
+            # main shift event container
+            mses = []
+            for tp in tachesPlanning:
+                p = tp['periode']
+                stmp = parser.parse(p['debut'])
+                if stmp < rsd or stmp > red:
+                    continue
+                begin = str(stmp.astimezone(timezone('UTC'))).replace('+00:00', 'Z')
+                stmp_e = parser.parse(p['fin'])
+                duration = (stmp_e - stmp).total_seconds() / 60
+                an = tp['tache']['href']
+                # main shift event
+                mse = {
+                    'description':'',
+                    'preShiftOvertime':'',
+                    'postShiftOvertime':'',
+                    'activityName':an,
+                    'eventStartTime':begin,
+                    'duration': str(int(duration))
+                }
+                mses.append(mse)
+            pausesPlanning = cp.get('pausesPlanning') or []
+            # shift activity list
+            sal = []
+            for pp in pausesPlanning:
+                an = pp.get('type')
+                p = tp['periode']
+                stmp = parser.parse(p['debut'])
+                if stmp < rsd or stmp > red:
+                    continue
+                begin = str(stmp.astimezone(timezone('UTC'))).replace('+00:00', 'Z')
+                stmp_e = parser.parse(p['fin'])
+                duration = (stmp_e - stmp).total_seconds() / 60
+                activity = {
+                    'activityName':an,
+                    'eventStartTime':begin,
+                    'duration': str(int(duration))
+                }
+                sal.append(activity)
+            mse = mses[0] if len(mses)>0 else ''
+            shift = {
+                'mainShiftEvent': mse,
+                'shiftActivityList': sal
+            }
+            if len(mses) > 0 or len(sal) > 0:
+                shifts.append(shift)
+
+        # schedule information
+        si = {
+            'shifts':shifts
+        }
+        if len(shifts) > 0:
+            sil.append(si)
+    verint_sil.append(sil)
+
+    return jsonify(verint_data)
 
 
 if __name__ == "__main__":

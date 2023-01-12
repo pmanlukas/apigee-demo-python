@@ -1,0 +1,482 @@
+{
+  "data" : {
+    "id" : "0",
+    "type" : "employee_schedule",
+    "attributes" : {
+      "callbackURL" : null,
+      "requestPeriodStartDate" : "2023-01-01T00:00:00Z",
+      "requestPeriodEndDate" : "2023-01-30T00:00:00Z",
+      "scheduleInformationList" : [{
+        "employeeIdentifier" : "Testuser1",
+        "employeeLookupKey" : "userName",
+        "shifts" : [
+           {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-24T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-24T11:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-24T14:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-24T12:45:00Z",
+            "duration" : "15"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-29T10:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-29T15:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-29T13:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-29T12:00:00Z",
+            "duration" : "30"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-14T10:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-14T15:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-14T12:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-14T13:30:00Z",
+            "duration" : "15"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-15T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-15T11:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-15T14:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-15T12:30:00Z",
+            "duration" : "15"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-18T10:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-18T15:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-18T13:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-18T12:00:00Z",
+            "duration" : "30"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-22T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-22T12:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-22T14:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-22T11:00:00Z",
+            "duration" : "30"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-28T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-28T12:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-28T11:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-28T14:00:00Z",
+            "duration" : "60"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-23T10:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-23T12:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-23T13:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-23T15:00:00Z",
+            "duration" : "60"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-21T08:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-21T13:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-21T10:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-21T11:30:00Z",
+            "duration" : "15"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-11T08:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-11T10:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-11T11:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-11T13:00:00Z",
+            "duration" : "60"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-17T08:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-17T11:45:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-17T13:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-17T10:00:00Z",
+            "duration" : "30"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-10T08:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-10T10:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-10T11:45:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-10T13:00:00Z",
+            "duration" : "60"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-09T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-09T11:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-09T14:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-09T12:45:00Z",
+            "duration" : "15"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-16T09:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-16T12:45:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-16T11:00:00Z",
+            "duration" : "30"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-16T14:00:00Z",
+            "duration" : "60"
+          } ]
+        }, {
+          "mainShiftEvent" : {
+            "description" : "",
+            "preShiftOvertime" : null,
+            "postShiftOvertime" : null,
+            "activityName" : "Phone_ENG",
+            "eventStartTime" : "2023-01-25T08:00:00Z",
+            "duration" : "480"
+          },
+          "shiftActivityList" : [ {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-25T11:30:00Z",
+            "duration" : "15"
+          }, {
+            "activityName" : "MJ_LUNCH",
+            "eventStartTime" : "2023-01-25T13:00:00Z",
+            "duration" : "60"
+          }, {
+            "activityName" : "MJ_BREAK",
+            "eventStartTime" : "2023-01-25T10:00:00Z",
+            "duration" : "30"
+          } ]
+        } ]
+      } ],
+      "calendarEventAssignmentList" : [ {
+        "employeeIdentifier" : "Testuser1",
+        "employeeLookupKey" : "userName",
+        "eventList" : [ {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-16T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-18T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-17T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-20T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-19T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-22T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-21T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-24T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-26T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-25T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-28T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-27T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-29T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-15T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-23T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-10T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-09T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-12T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-11T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-14T09:00:00Z",
+          "duration" : "30"
+        }, {
+          "eventType" : "calendar_event",
+          "description" : "",
+          "activityName" : "Coaching",
+          "eventStartTime" : "2023-01-13T09:00:00Z",
+          "duration" : "30"
+        } ]
+      } ],
+      "calendarEventAssignmentActivityRemovalList" : [ ]
+    }
+  },
+  "links" : {
+    "self" : ""
+  }
+}

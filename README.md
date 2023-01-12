@@ -57,3 +57,9 @@ Get employee data with two filters.
 ```
 <server>/employees?page_size=10&page=0&first_name=Nkw&last_name=Ngq
 ```
+
+## Get schedules
+
+```
+<server>/schedules?retrievalStartDate=2023-01-10T00:00:00Z&retrievalEndDate=2023-01-20T00:00:00Z
+```
