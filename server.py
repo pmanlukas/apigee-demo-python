@@ -34,6 +34,8 @@ class Verint:
 
     url = "https://mj-sapi-fa-dev-we1.azurewebsites.net/api/verint_employees_anonymizer?code=H38B9ek639ISYDl6hY7F83Igt7EbEFJ_cIoMiB7tfVBLAzFuMnJmSg=="
 
+    url_2 = "https://wfo.mt4.verintcloudservices.com/wfo/fis-api/v1/schedules?retrievalStartDate=2023-01-01T00%3A00%3A00Z&retrievalEndDate=2023-01-30T00%3A00%3A00Z&employeeLookupKey=userName&employeeIdentifierList=Testuser1"
+
     headers = headers.verintHeaders
 
     async def load(preload):
@@ -64,9 +66,19 @@ class Verint:
         df = pd.DataFrame(rows)
         return True, df
 
+    async def load_url_2():
+        print(">>> loading data from Verint (scheduled) <<<")
+        timeout = aiohttp.ClientTimeout(total=600)
+        async with aiohttp.ClientSession(headers=Verint.headers, timeout=timeout) as session:
+            async with session.get(Verint.url_2) as resp:
+                j = await resp.json()
+        return j
+
 class TS:
 
     url = "https://mj-sapi-fa-dev-we1.azurewebsites.net/api/tsqws_employees_anonymizer?code=nNOwHfjfDgCaHaUcUE0c4YUMqLwd2BikuX9Y_SmoKz60AzFuqn-Hfw=="
+
+    url_2 = "https://wfm.saas2.timesquare.fr/api/feed/personnes/947013/plannings_mod?datetime-min=2023-01-01&datetime-max=2023-01-30&start-index=1&max-results=2147483646"
 
     headers = headers.tsqHeaders
 
@@ -93,6 +105,14 @@ class TS:
                 'source':'tsq'})
         df = pd.DataFrame(rows)
         return True, df
+
+    async def load_url_2():
+        print(">>> loading data from TS <<<")
+        timeout = aiohttp.ClientTimeout(total=600)
+        async with aiohttp.ClientSession(headers=TS.headers, timeout=timeout) as session:
+            async with session.get(TS.url_2) as resp:
+                j = await resp.json()
+        return j
 
 async def loadData(url: str, headers: dict = None):
     print(f"load {url}")
