@@ -299,9 +299,9 @@ async def employees():
     end = start + page_size
     current = result
     if fname != '':
-        current = current[current['first_name'] == fname]
+        current = current[current['firstName'] == fname]
     if lname != '':
-        current = current[current['last_name'] == lname]
+        current = current[current['lastName'] == lname]
     return current.iloc[start:end].to_json(orient=orient)
 
 
