@@ -21,16 +21,27 @@ import json
 import headers
 from enum import Enum
 from pytz import timezone
+import random
+from datetime import datetime, timedelta
+
+def gen_datetime(min_year=1991, max_year=2022):
+    # generate a datetime in format yyyy-mm-dd hh:mm:ss.000000
+    start = datetime(min_year, 1, 1, 00, 00, 00)
+    years = max_year - min_year + 1
+    end = start + timedelta(days=365 * years)
+    return (start + (end - start) * random.random()).strftime("%Y-%m-%d")
 
 class Status(Enum):
-    NONE=1
-    FETCHING=2
-    DONE=3
+    NONE = 1
+    FETCHING = 2
+    DONE = 3
+
 
 app = Flask(__name__)
-status =Status.NONE
+status = Status.NONE
 lock = asyncio.Lock()
 result: pd.DataFrame
+
 
 class Verint:
 
@@ -57,15 +68,66 @@ class Verint:
         for e in j['data']:
             att = e.get('attributes')
             p = att.get('person')
-            a = p.get('address') or {'city':'','country':''}
+            a = p.get('address') or {'city': '', 'country': ''}
 
-            rows.append({
-                'id': e['id'],
-                'first_name': p['firstName'],
-                'last_name': p['lastName'],
+            '''rows.append({
+                'uniquePersonId': e['id'],
+                'firstName': p['firstName'],
+                'lastName': p['lastName'],
+                "dateOfBirth": "1965-09-30",
+                "emailCompany": "laborum aliquip",
+                "employeeId": "dolor",
+                "hrId": "est dolor",
+                "companyCode": "dolor do",
                 'city': a['city'],
                 'country': a['country'],
-                'source':'verint'})
+                'source': 'verint'})'''
+
+            rows.append({
+                "uniquePersonId": e['id'],
+                "firstName": p['firstName'],
+                "lastName": p['lastName'],
+                "dateOfBirth": "1965-09-30",
+                "emailCompany": "laborum aliquip",
+                "employeeId": "dolor",
+                "hrId": "est dolor",
+                "companyCode": "dolor do",
+                "companyName": "labore",
+                "contracts": [],
+                "activeContract": {},
+                "locations": [
+                    {
+                        "dateStart":gen_datetime(),
+                        "dateEnd": gen_datetime(),
+                        "location": {
+                            "locationId": "Duis quis labore exercitation",
+                            "siteCode": "mollit ex",
+                            "siteName": "labore non est sit dolor",
+                            "countryCodeIso3": "ex commodo tempor magna in",
+                            "countryName": "nisi ut non"
+                        }
+                    },
+                    {
+                        "dateStart": gen_datetime(),
+                        "dateEnd": gen_datetime(),
+                        "location": {
+                            "locationId": "ut ullamco",
+                            "siteCode": "minim Lorem sunt sit quis",
+                            "siteName": "ad dolore tempor consequat Duis",
+                            "countryCodeIso3": "eu dolore nulla qui",
+                            "countryName": a['country'],
+                        }
+                    }
+                ],
+                "activeLocation": {
+                    "locationId": "velit",
+                    "siteCode": "dolor minim est",
+                    "siteName": "eiusmod occaecat e",
+                    "countryCodeIso3": "aliquip velit",
+                    "countryName": a['country']
+                },
+                "schedules": []
+            })
         df = pd.DataFrame(rows)
         return True, df
 
@@ -76,6 +138,7 @@ class Verint:
             async with session.get(Verint.url_2) as resp:
                 j = await resp.text()
         return j
+
 
 class TS:
 
@@ -98,14 +161,60 @@ class TS:
                     j = await resp.json()
         rows = []
         for e in j['entries']:
-            a = e.get('adresse') or {'ville':'','pays':''}            
-            rows.append({
+            a = e.get('adresse') or {'ville': '', 'pays': ''}
+            '''rows.append({
                 'id': e['matricule'],
                 'first_name': e['prenom'],
                 'last_name': e['nom'],
                 'city': a['ville'],
                 'country': a['pays'],
-                'source':'tsq'})
+                'source': 'tsq'})'''
+
+            rows.append({
+                "uniquePersonId": e['matricule'],
+                "firstName": e['prenom'],
+                "lastName": e['nom'],
+                "dateOfBirth": "1965-09-30",
+                "emailCompany": "laborum aliquip",
+                "employeeId": "dolor",
+                "hrId": "est dolor",
+                "companyCode": "dolor do",
+                "companyName": "labore",
+                "contracts": [],
+                "activeContract": {},
+                "locations": [
+                    {
+                        "dateStart":gen_datetime(),
+                        "dateEnd": gen_datetime(),
+                        "location": {
+                            "locationId": "Duis quis labore exercitation",
+                            "siteCode": "mollit ex",
+                            "siteName": "labore non est sit dolor",
+                            "countryCodeIso3": "ex commodo tempor magna in",
+                            "countryName": "nisi ut non"
+                        }
+                    },
+                    {
+                       "dateStart":gen_datetime(),
+                        "dateEnd": gen_datetime(),
+                        "location": {
+                            "locationId": "ut ullamco",
+                            "siteCode": "minim Lorem sunt sit quis",
+                            "siteName": "ad dolore tempor consequat Duis",
+                            "countryCodeIso3": "eu dolore nulla qui",
+                            "countryName": a['pays']
+                        }
+                    }
+                ],
+                "activeLocation": {
+                    "locationId": "velit",
+                    "siteCode": "dolor minim est",
+                    "siteName": "eiusmod occaecat e",
+                    "countryCodeIso3": "aliquip velit",
+                    "countryName": a['pays'],
+                },
+                "schedules": []
+            })
         df = pd.DataFrame(rows)
         return True, df
 
@@ -117,6 +226,7 @@ class TS:
                 j = await resp.text()
         return j
 
+
 async def loadData(url: str, headers: dict = None):
     print(f"load {url}")
     data = pd.read_json(url)
@@ -124,7 +234,7 @@ async def loadData(url: str, headers: dict = None):
 
 
 async def mergeData(preload):
-    global status,result,lock
+    global status, result, lock
     try:
         results = await asyncio.gather(
             Verint.load(preload),
@@ -141,7 +251,7 @@ async def mergeData(preload):
     if resultA[0] and resultB[0]:
         dataA = resultA[1]
         dataB = resultB[1]
-        tmp = pd.concat([dataA,dataB])
+        tmp = pd.concat([dataA, dataB])
         #tmp = dataA.merge(dataB, how="outer",left_on="id", right_on="key")
         async with lock:
             result = tmp
@@ -157,7 +267,7 @@ async def trigger():
         else:
             status = Status.FETCHING
     preload = request.args.get("local", "yes")
-    await mergeData(preload=="yes")
+    await mergeData(preload == "yes")
     return jsonify({"status": "ok"})
 
 
@@ -165,9 +275,13 @@ async def trigger():
 async def test():
     return jsonify({"status": "running"})
 
+
 @app.route('/employees', methods=['GET'])
 async def employees():
     global result
+    if result.empty:
+        return jsonify({"error": "please call /trigger first"}), 400
+    
     try:
         page = int(request.args.get("page", "0"))
     except ValueError:
@@ -190,6 +304,7 @@ async def employees():
         current = current[current['last_name'] == lname]
     return current.iloc[start:end].to_json(orient=orient)
 
+
 @app.route('/schedules', methods=['GET'])
 async def schedules():
     try:
@@ -210,7 +325,7 @@ async def schedules():
     with open("verint_response_09012023.json") as file:
         j = json.load(file)
 
-    verint_data = j ['data']
+    verint_data = j['data']
     att = verint_data.get('attributes')
     att.pop('calendarEventAssignmentList')
     verint_sil = att.get('scheduleInformationList')
@@ -222,8 +337,8 @@ async def schedules():
             stmp = parser.parse(est)
             if stmp >= rsd and stmp <= red:
                 filtered.append(shift)
-            
-        si['shifts'] = filtered    
+
+        si['shifts'] = filtered
     with open("TSQ_response_09012023.json") as file:
         j = json.load(file)
     entries = j['entries']
@@ -242,17 +357,18 @@ async def schedules():
                 stmp = parser.parse(p['debut'])
                 if stmp < rsd or stmp > red:
                     continue
-                begin = str(stmp.astimezone(timezone('UTC'))).replace('+00:00', 'Z')
+                begin = str(stmp.astimezone(timezone('UTC'))
+                            ).replace('+00:00', 'Z')
                 stmp_e = parser.parse(p['fin'])
                 duration = (stmp_e - stmp).total_seconds() / 60
                 an = tp['tache']['href']
                 # main shift event
                 mse = {
-                    'description':'',
-                    'preShiftOvertime':'',
-                    'postShiftOvertime':'',
-                    'activityName':an,
-                    'eventStartTime':begin,
+                    'description': '',
+                    'preShiftOvertime': '',
+                    'postShiftOvertime': '',
+                    'activityName': an,
+                    'eventStartTime': begin,
                     'duration': str(int(duration))
                 }
                 mses.append(mse)
@@ -265,16 +381,17 @@ async def schedules():
                 stmp = parser.parse(p['debut'])
                 if stmp < rsd or stmp > red:
                     continue
-                begin = str(stmp.astimezone(timezone('UTC'))).replace('+00:00', 'Z')
+                begin = str(stmp.astimezone(timezone('UTC'))
+                            ).replace('+00:00', 'Z')
                 stmp_e = parser.parse(p['fin'])
                 duration = (stmp_e - stmp).total_seconds() / 60
                 activity = {
-                    'activityName':an,
-                    'eventStartTime':begin,
+                    'activityName': an,
+                    'eventStartTime': begin,
                     'duration': str(int(duration))
                 }
                 sal.append(activity)
-            mse = mses[0] if len(mses)>0 else ''
+            mse = mses[0] if len(mses) > 0 else ''
             shift = {
                 'mainShiftEvent': mse,
                 'shiftActivityList': sal
@@ -284,7 +401,7 @@ async def schedules():
 
         # schedule information
         si = {
-            'shifts':shifts
+            'shifts': shifts
         }
         if len(shifts) > 0:
             sil.append(si)
