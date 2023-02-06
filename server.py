@@ -293,8 +293,8 @@ async def employees():
     orient = request.args.get("orient", "records")
     if not orient in ["records", "columns", "values", "table", "split"]:
         return jsonify({"error": "parameter orient must be records, columns, table, split or values"}), 400
-    fname = request.args.get("first_name", "")
-    lname = request.args.get("last_name", "")
+    fname = request.args.get("firstName", "")
+    lname = request.args.get("lastName", "")
     start = page * page_size
     end = start + page_size
     current = result
