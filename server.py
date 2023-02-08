@@ -23,6 +23,7 @@ from enum import Enum
 from pytz import timezone
 import random
 from datetime import datetime, timedelta
+import re
 
 def gen_datetime(min_year=1991, max_year=2022):
     # generate a datetime in format yyyy-mm-dd hh:mm:ss.000000
@@ -56,7 +57,7 @@ class Verint:
         global lock, status
         if preload:
             print("preloading data for Verint")
-            with open("verint.json") as file:
+            with open("verint2.json") as file:
                 j = json.load(file)
         else:
             print(">>> loading data from Verint <<<")
@@ -68,6 +69,10 @@ class Verint:
         for e in j['data']:
             att = e.get('attributes')
             p = att.get('person')
+            u = att.get('user')
+            un = ""
+            if u:
+                un = u.get('username')
             a = p.get('address') or {'city': '', 'country': ''}
 
             '''rows.append({
@@ -83,14 +88,15 @@ class Verint:
                 'country': a['country'],
                 'source': 'verint'})'''
 
+            hrId = att.get('employeeNumber') or ""
             rows.append({
-                "uniquePersonId": e['id'],
+                "uniquePersonId": un,
                 "firstName": p['firstName'],
                 "lastName": p['lastName'],
                 "dateOfBirth": "1965-09-30",
                 "emailCompany": "laborum aliquip",
                 "employeeId": "dolor",
-                "hrId": "est dolor",
+                "hrId": hrId,
                 "companyCode": "dolor do",
                 "companyName": "labore",
                 "contracts": [],
@@ -126,7 +132,8 @@ class Verint:
                     "countryCodeIso3": "aliquip velit",
                     "countryName": a['country']
                 },
-                "schedules": []
+                "schedules": [],
+                "origin":"verint"
             })
         df = pd.DataFrame(rows)
         return True, df
@@ -151,7 +158,7 @@ class TS:
     async def load(preload):
         if preload:
             print("preloading data from TS")
-            with open("tsq.json") as file:
+            with open("tsq2.json") as file:
                 j = json.load(file)
         else:
             print(">>> loading data from TS <<<")
@@ -169,15 +176,20 @@ class TS:
                 'city': a['ville'],
                 'country': a['pays'],
                 'source': 'tsq'})'''
-
+            uid = e.get('matriculePaye') or 'none'
+            eid = e.get('uri')
+            if eid:
+                eid = re.findall(r'\d+', eid)[-1]
+            else:
+                eid =""
             rows.append({
-                "uniquePersonId": e['matricule'],
+                "uniquePersonId": uid,
                 "firstName": e['prenom'],
                 "lastName": e['nom'],
                 "dateOfBirth": "1965-09-30",
                 "emailCompany": "laborum aliquip",
-                "employeeId": "dolor",
-                "hrId": "est dolor",
+                "employeeId": eid,
+                "hrId":  e['matricule'],
                 "companyCode": "dolor do",
                 "companyName": "labore",
                 "contracts": [],
@@ -213,7 +225,8 @@ class TS:
                     "countryCodeIso3": "aliquip velit",
                     "countryName": a['pays'],
                 },
-                "schedules": []
+                "schedules": [],
+                "origin":"TSQ"
             })
         df = pd.DataFrame(rows)
         return True, df
@@ -258,6 +271,22 @@ async def mergeData(preload):
             status = Status.DONE
 
 
+@app.route('/load_verint', methods=['GET'])
+async def load_verint():
+    timeout = aiohttp.ClientTimeout(total=600)
+    async with aiohttp.ClientSession(headers=Verint.headers1, timeout=timeout) as session:
+        async with session.get(Verint.url) as resp:
+            j = await resp.json()
+            return jsonify(j)
+
+@app.route('/load_tsq', methods=['GET'])
+async def load_tsq():
+    timeout = aiohttp.ClientTimeout(total=600)
+    async with aiohttp.ClientSession(headers=TS.headers1, timeout=timeout) as session:
+        async with session.get(TS.url) as resp:
+            j = await resp.json()
+            return jsonify(j)
+
 @app.route('/trigger', methods=['GET'])
 async def trigger():
     global lock, result, status
@@ -295,6 +324,7 @@ async def employees():
         return jsonify({"error": "parameter orient must be records, columns, table, split or values"}), 400
     fname = request.args.get("firstName", "")
     lname = request.args.get("lastName", "")
+    origin = request.args.get("origin", "")
     start = page * page_size
     end = start + page_size
     current = result
@@ -302,8 +332,9 @@ async def employees():
         current = current[current['firstName'] == fname]
     if lname != '':
         current = current[current['lastName'] == lname]
+    if origin != '':
+        current = current[current['origin'] == origin]
     return current.iloc[start:end].to_json(orient=orient)
-
 
 @app.route('/schedules', methods=['GET'])
 async def schedules():
