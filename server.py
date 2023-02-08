@@ -133,7 +133,7 @@ class Verint:
                     "countryName": a['country']
                 },
                 "schedules": [],
-                "origin":"verint"
+                "origin":"Verint"
             })
         df = pd.DataFrame(rows)
         return True, df
