@@ -90,12 +90,12 @@ class Verint:
 
             hrId = att.get('employeeNumber') or ""
             rows.append({
-                "uniquePersonId": un,
+                "uniquePersonId": e['id'],
                 "firstName": p['firstName'],
                 "lastName": p['lastName'],
                 "dateOfBirth": "1965-09-30",
                 "emailCompany": "laborum aliquip",
-                "employeeId": "dolor",
+                "employeeId": un,
                 "hrId": hrId,
                 "companyCode": "dolor do",
                 "companyName": "labore",
